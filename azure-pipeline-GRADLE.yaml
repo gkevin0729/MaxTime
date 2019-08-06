@@ -1,0 +1,29 @@
+variables:
+- group: artifactory-dev
+- group: fluid
+- name: sonarAdditionalProp
+  value: ''
+- name: fluidInicialesProyecto
+  value: 'prt'
+
+resources:
+  repositories:
+    - repository: template
+      type: git
+      name: DevOps/_git/templates-yaml
+trigger:
+  - master
+  - develop
+stages:
+- stage:
+  jobs:
+  - job:
+    pool:
+      name: Banistmo-Linux-Pool
+      demands: maven
+    steps:
+    - template: build_GRADLE.yml@template #ref en otro repository
+      parameters:
+        fluidInicialesProyecto: ${{variables.fluidInicialesProyecto}}
+        sonarAdditionalProp: ${{variables.sonarAdditionalProp}}
+
