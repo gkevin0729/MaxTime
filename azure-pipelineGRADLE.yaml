@@ -1,29 +1,71 @@
 variables:
-- group: artifactory-dev
-- group: fluid
-- name: sonarAdditionalProp
+# variable de grupo de artifactory
+- group: Artifactory
+# variable de grupos de fluid
+- group: Fluid
+
+- name: sonarSources
+# propiedad de sonarQube para indicar el directorio a analizar
+  value : ''
+- name: sonarExclusions
+# propiedad de sonarQube para indicar los directorios a excluir en el análisis 
+  value : ''
+- name: sonarCreateMaster
+# 1=proyecto nuevo en sonarQube y 0=para actualizar una rama nueva del proyecto existente en sonarQube
+  value : ''
+- name: sonarQubeServiceEndpoint
+# Nombre del service connection para tarea de sonarQube
+  value : ''
+- name: sonarQubeServiceEndpointGeneric
+# Nombre del service connection de sonarQube para tarea de gradle o maven 
+  value : ''
+- name: buildOptions
+# Parametro maven para agregar opciones a la tarea de compilación de maven
+  value: '-Partifactory_user=$(artifactory.viewer.user) -Partifactory_password=$(artifactory.viewer.psw) -Partifactory_contextUrl=$(artifactory.saas.path) -Partifactory_repo=$(gradle.repository)'
+- name: taskCommand
+# comandos del gestor para ejecutar tareas de lifecycle
+  value: 'test build'
+- name: testResultsFiles 
+# directorio y nombre del archivo de resultado de las pruebas unitarias
+  value: '**/TEST-*.xml'
+- name: idfluid
+# id de proyecto en fluid asserts
   value: ''
-- name: fluidInicialesProyecto
-  value: 'prt'
+- name: secretfluid
+# secretKey de proyecto en fluid asserts
+  value: ''
 
 resources:
   repositories:
     - repository: template
       type: git
       name: DevOps/_git/templates-yaml
+      ref: 'refs/heads/develop' # indicamos la rama que apuntamos en el repositorios template-yaml, siempre debemos apuntar a master
+      
 trigger:
   - master
   - develop
+  - release/*
+
+name: $(date:yyyyMMdd)$(rev:.r)
 stages:
 - stage:
   jobs:
   - job:
     pool:
       name: Banistmo-Linux-Pool
-      demands: maven
+    workspace:
+      clean: resources
     steps:
-    - template: build_GRADLE.yml@template #ref en otro repository
-      parameters:
-        fluidInicialesProyecto: ${{variables.fluidInicialesProyecto}}
-        sonarAdditionalProp: ${{variables.sonarAdditionalProp}}
-
+    - template: build_GRADLE_LTS.yml@template #ref de template en otro repository
+      parameters: 
+        sonarSources: ${{variables.sonarSources}}
+        sonarExclusions: ${{variables.sonarExclusions}}
+        sonarCreateMaster: ${{variables.sonarCreateMaster}}
+        sonarQubeServiceEndpoint: ${{variables.sonarQubeServiceEndpoint}}
+        sonarQubeServiceEndpointGeneric: ${{variables.sonarQubeServiceEndpointGeneric}}
+        buildOptions: ${{variables.buildOptions}}
+        taskCommand: ${{variables.taskCommand}}
+        testResultsFiles: ${{variables.testResultsFiles}}
+        idfluid: ${{variables.idfluid}}
+        secretfluid: ${{variables.secretfluid}}
