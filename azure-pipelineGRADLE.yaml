@@ -1,50 +1,55 @@
 variables:
 # variable de grupo de artifactory
-- group: Artifactory
+- group: Artifactory  
 # variable de grupos de fluid
-- group: Fluid
-
+- group: Fluid  
+# Propiedad del sonarQube para indicar el directorio a analizar
 - name: sonarSources
-# propiedad de sonarQube para indicar el directorio a analizar
-  value : ''
+  value: 'src' 
+# propiedad de sonarQube para indicar los directorios a excluir en el análisis
 - name: sonarExclusions
-# propiedad de sonarQube para indicar los directorios a excluir en el análisis 
-  value : ''
-- name: sonarCreateMaster
+  value: ''
 # 1=proyecto nuevo en sonarQube y 0=para actualizar una rama nueva del proyecto existente en sonarQube
-  value : ''
-- name: sonarQubeServiceEndpoint
+- name: sonarCreateMaster
+  value: '1'  
 # Nombre del service connection para tarea de sonarQube
-  value : ''
+- name: sonarQubeServiceEndpoint 
+  value: '' 
+# Nombre del service connection de sonarQube para tarea de gradle o maven
 - name: sonarQubeServiceEndpointGeneric
-# Nombre del service connection de sonarQube para tarea de gradle o maven 
-  value : ''
-- name: buildOptions
+  value: '' 
 # Parametro maven para agregar opciones a la tarea de compilación de maven
+- name: buildOptions
   value: '-Partifactory_user=$(artifactory.viewer.user) -Partifactory_password=$(artifactory.viewer.psw) -Partifactory_contextUrl=$(artifactory.saas.path) -Partifactory_repo=$(gradle.repository)'
+#comandos del gestor para ejecutar tareas de lifecycle
 - name: taskCommand
-# comandos del gestor para ejecutar tareas de lifecycle
   value: 'test build'
 - name: testResultsFiles 
-# directorio y nombre del archivo de resultado de las pruebas unitarias
+#directorio y nombre del archivo de resultado de las pruebas unitarias
   value: '**/TEST-*.xml'
+# id de proyecto en fluid asserts. Preguntar al lider del componente o lider técnico el valor
 - name: idfluid
-# id de proyecto en fluid asserts
-  value: ''
+  value: $(id) 
+# secretKey de proyecto en fluid asserts. Preguntar al lider del componente o lider técnico el valor
 - name: secretfluid
-# secretKey de proyecto en fluid asserts
-  value: ''
+  value: $(secret)
+# Ruta donde se encuentra el gradleWrapperFile en el proyecto
+- name: gradleWPath
+  value: 'SVP_APP_ANDROID/gradlew'
+# Ruta de directorio de trabajo, si no tiene un directorio diferente no cambie el valor por defecto establecido.
+- name: gradleWorkingDirectory
+  value: '$(System.DefaultWorkingDirectory)'
 
 resources:
   repositories:
     - repository: template
       type: git
       name: DevOps/_git/templates-yaml
-      ref: 'refs/heads/develop' # indicamos la rama que apuntamos en el repositorios template-yaml, siempre debemos apuntar a master
-      
+      ref: 'refs/heads/master' # indicamos la rama que apuntamos en el repositorios template-yaml, siempre debemos apuntar a master
 trigger:
   - master
   - develop
+  - release
   - release/*
 
 name: $(date:yyyyMMdd)$(rev:.r)
@@ -58,12 +63,12 @@ stages:
       clean: resources
     steps:
     - template: build_GRADLE_LTS.yml@template #ref de template en otro repository
-      parameters: 
-        sonarSources: ${{variables.sonarSources}}
+      parameters:
         sonarExclusions: ${{variables.sonarExclusions}}
+        sonarSources: ${{variables.sonarSources}}
         sonarCreateMaster: ${{variables.sonarCreateMaster}}
         sonarQubeServiceEndpoint: ${{variables.sonarQubeServiceEndpoint}}
-        sonarQubeServiceEndpointGeneric: ${{variables.sonarQubeServiceEndpointGeneric}}
+        sonarQubeServiceEndpointGeneric: ${{variables.sonarQubeServiceEndpointGeneric}}        
         buildOptions: ${{variables.buildOptions}}
         taskCommand: ${{variables.taskCommand}}
         testResultsFiles: ${{variables.testResultsFiles}}
