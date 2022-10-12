@@ -15,7 +15,6 @@ public class ManualStepDefinitions {
     }
 
     @Given("^(.*)$")
-    public void stepValidator(String step) {
-        validate(step, scenario.getName());
+    public void stepValidator(String step) {validate(step, scenario.getName());
     }
 }
