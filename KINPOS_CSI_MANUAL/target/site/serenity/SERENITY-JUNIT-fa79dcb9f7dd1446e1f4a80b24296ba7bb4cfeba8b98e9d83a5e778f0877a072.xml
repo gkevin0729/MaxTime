@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite errors="0" failures="1" name="Se realizaran pruebas para ver el  cambio de logo banistmo para Mpos, Pos, Csi." skipped="0" tests="8" time="13.76" timestamp="2023-05-16 03:39:30"><testcase name="ejecucion de  cambio de logo en POS S500"><failure type="java.lang.AssertionError"/><system-err>null&#13;
+com.banistmo.certificacion.ManualTests.validate(ManualTests.java:23)&#13;
+com.banistmo.certificacion.stepdefinitions.ManualStepDefinitions.stepValidator(ManualStepDefinitions.java:18)&#13;
+✽.a que ingreso a mpos pos csi(src/test/resources/features/cambio_logo_banistmo.feature:8)&#13;
+</system-err></testcase><testcase name="ejecucion de  cambio de logo en POS S800"/><testcase name="ejecucion de  cambio de logo en POS D210"/><testcase name="ejecucion de  cambio de logo en POS S900"/><testcase name="ejecucion de  cambio de logo en POS S920"/><testcase name="ejecucion de  cambio de logo en POS S80"/><testcase name="ejecucion de  cambio de logo en POS S90"/><testcase name="ejecucion de  cambio de imagen en CSI"/></testsuite>
