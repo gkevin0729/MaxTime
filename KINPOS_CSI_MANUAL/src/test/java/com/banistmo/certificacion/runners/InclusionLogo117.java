@@ -7,10 +7,10 @@ import org.junit.runner.RunWith;
 
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
-        features = "src/test/resources/features/cambiologobanistmo.feature",
+        features = "src/test/resources/features/inclusion_logo_117.feature",
         glue = "com/banistmo/certificacion/stepdefinitions",
         snippets = SnippetType.CAMELCASE
 )
 
-public class CambioLogoBanistmo {
+public class InclusionLogo117 {
 }
