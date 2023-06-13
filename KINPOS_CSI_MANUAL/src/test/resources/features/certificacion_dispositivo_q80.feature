@@ -14,7 +14,7 @@ Característica: Se va a ejecutar pruebas funcionales a nivel del POS para valid
   @pruebaManual
   Escenario: Certificacion Dispositivo Q80- 201020
     Cuando Se va a ejecutar pruebas transaccionales retail a nivel del POS para validar Fallas en la comunicación de los puertos extendidos LAN, y que la misma funcione correctamente.
-        Entonces  debe funcionar correctamente transaccional retail .
+        Entonces  debe funcionar correctamente transaccional retail ..
 
   @pruebaManual
  Escenario: Certificacion Dispositivo Q80- 201020
